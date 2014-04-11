@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:webflow="http://www.springframework.org/schema/webflow-config"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+               http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/webflow-config
+           http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.xsd
+           http://cxf.apache.org/jaxws
+           http://cxf.apache.org/schemas/jaxws.xsd">
+
+	<bean id="SearchFlowHandler" class="com.irproject.search.handler.SearchFlowHandler" />
+	<bean id="SearchEngineController" class="com.irproject.search.controller.SearchEngineController">
+	<property name="searchTypes" ref="SearchTypes"></property>
+	<property name="searchEngineInter" ref="searchEngineImpl"></property>
+	<property name="recommenderInter" ref="recommenderImpl"></property>
+	
+	</bean>
+	
+	<bean id="searchEngineImpl" class="com.irproject.search.dao.impl.SearchEngineImpl">
+	
+	</bean>
+	<bean id="recommenderImpl" class="com.irproject.search.dao.impl.RecommendationImpl">
+	<property name="recommenderBean" ref="recommenderBean"></property>
+	</bean>
+	<bean id="movieResBean" class="com.irproject.search.bean.MovieResBean"></bean>
+	<bean id="recommenderBean" class="com.irproject.search.bean.RecommenderBean"></bean>
+	
+	<bean id="ajaxBuilder" class="com.irproject.search.controller.AjaxBuilder">
+		<property name="methodNameResolver" ref="ajaxMethodNameResolver" />
+		<property name="searchEngineInter" ref="searchEngineImpl"></property>
+	</bean>
+	<bean id="ajaxMethodNameResolver"
+		class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+		<property name="mappings">
+			<props>
+				<prop key="/autoComplete.ir">loadAutoCompleteData</prop>				
+			</props>
+		</property>
+	</bean>
+
+	<bean name="SearchTypes" class = "com.irproject.search.bean.SearchTypes"></bean>
+
+
+
+
+
+	
+
+
+</beans>

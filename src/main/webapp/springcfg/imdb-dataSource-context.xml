@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:webflow="http://www.springframework.org/schema/webflow-config"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/webflow-config
+           http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.xsd
+           http://cxf.apache.org/jaxws
+           http://cxf.apache.org/schemas/jaxws.xsd">
+	
+
+<bean id="tbsJdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+  <constructor-arg>
+   <ref bean="imdbdataSource" />
+  </constructor-arg>
+</bean>
+
+<bean id="imdbdataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+  <property name="jndiName">
+   <value>java:IMDBDataSource</value>
+  </property>
+</bean>
+
+
+</beans>

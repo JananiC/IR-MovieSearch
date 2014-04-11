@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<var name="loginBean" class="com.irproject.search.bean.LoginBean" />
+	<var name="searchBean" class="com.irproject.search.bean.SearchBean" />
+	<view-state id="searchPageView" model="searchBean" view="search">
+	<on-render>
+			<evaluate
+				expression="SearchEngineController.loadSearchType(flowRequestContext)"
+				result="flowScope.res"></evaluate>
+		</on-render>
+		<transition on="search" to="searchAction"></transition>
+		<transition on="logout" to="logoutAction"></transition>
+		<transition on="loginPage" to="loginView"></transition>
+	</view-state>
+	<action-state id="searchAction" >
+		<evaluate expression="SearchEngineController.searchIndex(flowRequestContext,searchBean)"></evaluate>
+		<transition on="success" to ="searchPageView"></transition>
+		<transition on="loginPage" to="loginView"></transition>
+	</action-state>
+	<view-state id="loginView" model="loginBean" view="login">
+		
+		<transition on="login" to="loginAction"></transition>
+	</view-state>	
+	<action-state id="loginAction">
+		<evaluate expression="SearchEngineController.verifyLogin(flowRequestContext,loginBean)"
+		result="flowScope.res"></evaluate>
+		<transition on="success" to="searchPageView"></transition>
+		<transition on="failure" to="loginView"></transition>
+	</action-state>
+	
+	
+	
+	
+	
+	
+		<action-state id="logoutAction" >
+		<evaluate expression="SearchEngineController.logout(flowRequestContext)"></evaluate>
+		<transition on="success" to ="logOutView"></transition>
+		</action-state>
+		
+	<view-state id="logOutView"  view="logout">	
+		
+		<transition on="login" to="loginView"></transition>
+	</view-state>	
+		
+	
+
+</flow>

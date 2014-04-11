@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:webflow="http://www.springframework.org/schema/webflow-config"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+             http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/webflow-config
+           http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.xsd">
+	<!-- webflow Entry point -->
+	<webflow:flow-executor id="flowExecutor"
+		flow-registry="flowRegistry">
+		<webflow:flow-execution-repository
+			max-executions="-1" max-execution-snapshots="30" />
+	</webflow:flow-executor>
+
+	<webflow:flow-registry id="flowRegistry"
+		flow-builder-services="flowBuilderServices">
+
+		<!-- Administration Starts -->
+		<webflow:flow-location
+			path="/WEB-INF/flows/Search.xml" />
+		
+	</webflow:flow-registry>
+
+	<webflow:flow-builder-services id="flowBuilderServices"
+		view-factory-creator="mvcViewFactoryCreator" />
+	<bean
+		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+
+	<bean id="mvcViewFactoryCreator"
+		class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
+		<property name="viewResolvers" ref="viewResolverjs" />
+
+	</bean>
+
+	<bean id="viewResolverjs"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+
+
+
+	<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+		<property name="flowExecutor" ref="flowExecutor" />
+	</bean>
+
+	<bean id="simpleUrlMapping"
+		class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<!-- AJAX URL mapping Starts -->
+
+				<prop key="/Search.ir">SearchFlowHandler</prop>
+				<prop key="/autoComplete.ir">ajaxBuilder</prop>
+				
+
+			</props>
+		</property>
+	</bean>
+</beans>
